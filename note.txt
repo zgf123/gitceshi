@@ -46,6 +46,11 @@ heheda这是 fedtu r1e002
 function aaa(){
 	console.log(1);
 }
+
+function ddd(){
+	console.log(2);
+}
+
 function ccc(){
 	console.log(3);
 }

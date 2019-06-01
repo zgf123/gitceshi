@@ -49,6 +49,7 @@ function aaa(){
 
 function ddd(){
 	console.log('dd');
+	console.log('4444');
 }
 
 function ccc(){

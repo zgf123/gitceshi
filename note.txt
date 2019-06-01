@@ -48,7 +48,7 @@ function aaa(){
 }
 
 function ddd(){
-	console.log('d');
+	console.log('dd');
 }
 
 function ccc(){

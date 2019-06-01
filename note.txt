@@ -48,6 +48,7 @@ function aaa(){
 }
 
 function ddd(){
+	console.log(22);
 	console.log('dd');
 	console.log('4444');
 }

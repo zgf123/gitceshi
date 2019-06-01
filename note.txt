@@ -50,6 +50,7 @@ function aaa(){
 function ddd(){
 	console.log(22);
 	console.log('d');
+	console.log('333');
 }
 
 function ccc(){

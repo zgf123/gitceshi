@@ -43,3 +43,6 @@ git push --set-upstream origin master
 
 我再002上又新增了一些
 heheda这是 fedtu r1e002
+function aaa(){
+	console.log(1);
+}

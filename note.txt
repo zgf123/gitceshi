@@ -40,4 +40,6 @@ git config --global http.postBuffer 524288000
 
 git pull origin master
 git push --set-upstream origin master
-heheda这是 featu r1e002
+
+我再002上又新增了一些
+heheda这是 fedtu r1e002

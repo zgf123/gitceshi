@@ -6,5 +6,3 @@ HEAD 测试2
 HEAD 测试3
 
 revert 1
-revert 2
-revert 3

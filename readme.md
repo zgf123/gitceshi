@@ -6,6 +6,7 @@ HEAD 测试2
 HEAD 测试3
 
 revert 1
+test2
 
 rebase 1
 rebase 2
@@ -17,3 +18,6 @@ rebase 3
 1
 2
 3
+test1
+
+test3

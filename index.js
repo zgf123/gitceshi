@@ -1,29 +1,20 @@
 const arr = [6, 7, 8, 5, 9, 3, 4, 1, 2];
 
-function quickSort(arr, left = 0, right = arr.length - 1) {
-  if (left < right) {
-    const index = partition(arr, left, right);
-    quickSort(arr, left, index - 1);
-    quickSort(arr, index, right);
+function countingSort(arr) {
+  if (arr.length < 2) return arr;
+  const countArr = new Array(Math.max(...arr) + 1);
+  for (let i = 0; i < arr.length; i++) {
+    if (!countArr[arr[i]]) countArr[arr[i]] = 0;
+    countArr[arr[i]]++;
+  }
+  let index = 0;
+  for (let j = 0; j < countArr.length; j++) {
+    while (countArr[j] > 0) {
+      arr[index++] = j;
+      countArr[j]--;
+    }
   }
   return arr;
 }
 
-function partition(arr, left, right) {
-  const pivot = arr[Math.floor((left + right) / 2)];
-  let l = left;
-  let r = right;
-
-  while (l < r) {
-    while (arr[l] < pivot) l++;
-    while (arr[r] > pivot) r--;
-    if (l <= r) {
-      [arr[l], arr[r]] = [arr[r], arr[l]];
-      l++;
-      r--;
-    }
-  }
-  return l;
-}
-
-console.log(quickSort(arr));
+console.log(countingSort(arr));

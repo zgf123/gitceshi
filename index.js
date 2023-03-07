@@ -13,6 +13,7 @@ function partition(arr, left, right) {
   const pivot = arr[Math.floor((left + right) / 2)];
   let l = left;
   let r = right;
+
   while (l < r) {
     while (arr[l] < pivot) l++;
     while (arr[r] > pivot) r--;

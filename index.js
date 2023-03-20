@@ -1,20 +1,27 @@
-const arr = [6, 7, 8, 5, 9, 3, 4, 1, 2];
+const arr = [6, 7, 0, 5, 9, -3, 17, 10, -2];
 
-function countingSort(arr) {
-  if (arr.length < 2) return arr;
-  const countArr = new Array(Math.max(...arr) + 1);
-  for (let i = 0; i < arr.length; i++) {
-    if (!countArr[arr[i]]) countArr[arr[i]] = 0;
-    countArr[arr[i]]++;
-  }
-  let index = 0;
-  for (let j = 0; j < countArr.length; j++) {
-    while (countArr[j] > 0) {
-      arr[index++] = j;
-      countArr[j]--;
+function radixSort(arr) {
+  const max = Math.max(...arr);
+  const min = Math.min(...arr);
+  if (max === min) return arr;
+  const maxDigit = Math.floor(Math.log10(max - min)) + 1;
+
+  let radixBase = 10;
+  for (var i = 0; i < maxDigit; i++, radixBase *= 10) {
+    const buketArr = [];
+    for (var j = 0; j < arr.length; j++) {
+      const difference = arr[j] - min;
+      const bitSignificance = radixBase / 10;
+      const buketIndex = Math.floor((difference % radixBase) / bitSignificance);
+      if (!buketArr[buketIndex]) buketArr[buketIndex] = [];
+      buketArr[buketIndex].push(arr[j]);
+    }
+    arr = [];
+    for (var j = 0; j < buketArr.length; j++) {
+      if (buketArr[j]) arr.push(...buketArr[j]);
     }
   }
   return arr;
 }
 
-console.log(countingSort(arr));
+console.log(radixSort(arr));

@@ -1,27 +1,40 @@
-const arr = [6, 7, 0, 5, 9, -3, 17, 10, -2];
+const arr = [6, 7, 0, 5, 9, -3, 17, 10, -2, 1];
 
-function radixSort(arr) {
-  const max = Math.max(...arr);
-  const min = Math.min(...arr);
-  if (max === min) return arr;
-  const maxDigit = Math.floor(Math.log10(max - min)) + 1;
+var len; // 因为声明的多个函数都需要数据长度，所以把len设置成为全局变量
 
-  let radixBase = 10;
-  for (var i = 0; i < maxDigit; i++, radixBase *= 10) {
-    const buketArr = [];
-    for (var j = 0; j < arr.length; j++) {
-      const difference = arr[j] - min;
-      const bitSignificance = radixBase / 10;
-      const buketIndex = Math.floor((difference % radixBase) / bitSignificance);
-      if (!buketArr[buketIndex]) buketArr[buketIndex] = [];
-      buketArr[buketIndex].push(arr[j]);
-    }
-    arr = [];
-    for (var j = 0; j < buketArr.length; j++) {
-      if (buketArr[j]) arr.push(...buketArr[j]);
-    }
+function heapSort(arr) {
+  // 建立大顶堆
+  len = arr.length;
+  for (var i = Math.floor(len / 2); i >= 0; i--) {
+    heapify(arr, i);
+  }
+
+  for (var i = arr.length - 1; i > 0; i--) {
+    [arr[0], arr[i]] = [arr[i], arr[0]];
+    len--;
+    heapify(arr, 0);
   }
   return arr;
 }
 
-console.log(radixSort(arr));
+function heapify(arr, i) {
+  // 堆调整
+  var left = 2 * i + 1,
+    right = 2 * i + 2,
+    largest = i;
+
+  if (left < len && arr[left] > arr[largest]) {
+    largest = left;
+  }
+
+  if (right < len && arr[right] > arr[largest]) {
+    largest = right;
+  }
+
+  if (largest != i) {
+    [arr[i], arr[largest]] = [arr[largest], arr[i]];
+    heapify(arr, largest);
+  }
+}
+
+console.log(heapSort(arr));

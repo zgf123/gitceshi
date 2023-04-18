@@ -25,9 +25,8 @@ function minCoins(coins, amount) {
 function findValue(coins, cache, amount) {
   let i = coins.length - 1;
   const result = [];
-
   while (i > 0 && amount > 0) {
-    if (cache[i][amount] !== cache[i - 1][amount]) {
+    if (cache[i][amount] < cache[i - 1][amount]) {
       result.push(coins[i]);
       amount = amount - coins[i];
     } else {
@@ -38,4 +37,4 @@ function findValue(coins, cache, amount) {
   return result;
 }
 
-console.log(minCoins([1, 2, 4], 7));
+console.log(minCoins([1, 3, 4, 5, 7], 9));

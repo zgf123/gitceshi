@@ -1,34 +1,41 @@
 const arr = [6, 7, 0, -5, 1, 11, 9, 3, 17, 10, 2];
 
-// 简单方式
-function quickSort(arr) {
-  if (arr.length < 2) return arr;
-  const middle = Math.floor(arr.length / 2);
-  const pivot = arr.splice(middle, 1)[0];
-
-  const left = [];
-  const right = [];
-
-  for (let i = 0; i < arr.length; i++) {
-    arr[i] < pivot ? left.push(arr[i]) : right.push(arr[i]);
-  }
-  return [...quickSort(left), pivot, ...quickSort(right)];
-}
-
-function binarySearch(arr, value) {
-  const newArr = quickSort(arr);
-  let l = 0;
-  let r = newArr.length - 1;
-  while (l !== r) {
-    const mid = Math.floor((l + r) / 2);
-    if (newArr[mid] === value) return mid;
-    if (newArr[mid] < value) {
-      l = mid + 1;
-    } else {
-      r = mid - 1;
+function minCoins(coins, amount) {
+  coins.unshift(0);
+  const cache = [];
+  for (let i = 0; i < coins.length; i++) {
+    if (!cache[i]) cache[i] = [];
+    for (let j = 0; j <= amount; j++) {
+      if (i === 0) {
+        cache[i][j] = 0;
+      } else {
+        if (j >= coins[i]) {
+          const cur = 1 + cache[i][j - coins[i]];
+          const prev = cache[i - 1][j];
+          cache[i][j] = prev ? Math.min(prev, cur) : cur;
+        } else {
+          cache[i][j] = cache[i - 1][j];
+        }
+      }
     }
   }
-  return -1;
+  return findValue(coins, cache, amount);
 }
 
-console.log(binarySearch(arr, 1));
+function findValue(coins, cache, amount) {
+  let i = coins.length - 1;
+  const result = [];
+
+  while (i > 0 && amount > 0) {
+    if (cache[i][amount] !== cache[i - 1][amount]) {
+      result.push(coins[i]);
+      amount = amount - coins[i];
+    } else {
+      i--;
+    }
+  }
+
+  return result;
+}
+
+console.log(minCoins([1, 2, 4], 7));

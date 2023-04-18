@@ -1,40 +1,32 @@
-const arr = [6, 7, 0, -5, 1, 11, 9, 3, 17, 10, 2];
-
-function minCoins(coins, amount) {
-  coins.unshift(0);
+function minCoinChange(coins, amount) {
   const cache = [];
-  for (let i = 0; i < coins.length; i++) {
-    if (!cache[i]) cache[i] = [];
-    for (let j = 0; j <= amount; j++) {
-      if (i === 0) {
-        cache[i][j] = 0;
-      } else {
-        if (j >= coins[i]) {
-          const cur = 1 + cache[i][j - coins[i]];
-          const prev = cache[i - 1][j];
-          cache[i][j] = prev ? Math.min(prev, cur) : cur;
-        } else {
-          cache[i][j] = cache[i - 1][j];
-        }
+  const makeChange = (value) => {
+    if (!value) return [];
+    if (cache[value]) return cache[value];
+    let min = [];
+    let newMin;
+    let newAmount;
+    for (let i = 0; i < coins.length; i++) {
+      const coin = coins[i];
+      newAmount = value - coin;
+      if (newAmount >= 0) {
+        newMin = makeChange(newAmount);
+      }
+      if (
+        newAmount >= 0 &&
+        (newMin.length < min.length - 1 || !min.length) &&
+        (newMin.length || !newAmount)
+      ) {
+        min = [coin].concat(newMin);
+        console.log("min: [ " + min + " ] ---> " + amount);
       }
     }
-  }
-  return findValue(coins, cache, amount);
+    return (cache[value] = min);
+  };
+  const arr = makeChange(amount);
+  // console.log(cache);
+  return arr;
 }
 
-function findValue(coins, cache, amount) {
-  let i = coins.length - 1;
-  const result = [];
-  while (i > 0 && amount > 0) {
-    if (cache[i][amount] < cache[i - 1][amount]) {
-      result.push(coins[i]);
-      amount = amount - coins[i];
-    } else {
-      i--;
-    }
-  }
-
-  return result;
-}
-
-console.log(minCoins([1, 3, 4, 5, 7], 9));
+// console.log(minCoinChange([1, 5, 10, 25], 36));
+console.log("结果：" + minCoinChange([1], 1));

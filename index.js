@@ -9,8 +9,8 @@ function minCoinChange(coins, amount) {
       const newAmount = value - coin;
       if (newAmount >= 0) {
         const newMin = makeChange(newAmount);
-        const curMin = [coin, ...newMin];
         if (newMin.length || newAmount === 0) {
+          const curMin = [coin, ...newMin];
           if (!min.length) {
             min = curMin;
           } else if (curMin.length < min.length) {

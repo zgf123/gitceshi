@@ -6,10 +6,10 @@ function minCoinChange(coins, amount) {
     let min = [];
     for (let i = 0; i < coins.length; i++) {
       const coin = coins[i];
-      const newAmount = value - coin;
-      if (newAmount >= 0) {
-        const newMin = makeChange(newAmount);
-        if (newMin.length || newAmount === 0) {
+      const newValue = value - coin;
+      if (newValue >= 0) {
+        const newMin = makeChange(newValue);
+        if (newMin.length || newValue === 0) {
           const curMin = [coin, ...newMin];
           if (!min.length) {
             min = curMin;

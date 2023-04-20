@@ -1,26 +1,29 @@
 function minCoinChange(coins, amount) {
   const cache = [];
-  for (let i = 0; i < coins.length; i++) {
-    const coin = coins[i];
-    for (let j = 0; j <= amount; j++) {
-      if (!cache[j]) cache[j] = [];
-      const newAmount = j - coin;
-      if (newAmount === 0) {
-        cache[j] = [coin];
-      } else if (newAmount > 0) {
-        if (cache[newAmount].length) {
-          const oldMin = cache[j];
-          const newMin = [coin, ...cache[newAmount]];
-          if (!oldMin.length) {
-            cache[j] = newMin;
-          } else if (newMin.length < oldMin.length) {
-            cache[j] = newMin;
+  function makeChange(value) {
+    if (value <= 0) return [];
+    if (cache[value]) return cache[value];
+    let min = [];
+    for (let i = 0; i < coins.length; i++) {
+      const coin = coins[i];
+      const newValue = value - coin;
+      if (newValue === 0) {
+        min = [coin];
+      } else if (newValue > 0) {
+        const newMin = makeChange(newValue);
+        if (newMin.length) {
+          const curMin = [coin, ...newMin];
+          if (!min.length) {
+            min = curMin;
+          } else if (curMin.length < min.length) {
+            min = curMin;
           }
         }
       }
     }
+    return (cache[value] = min);
   }
-  return cache[amount];
+  return makeChange(amount);
 }
 
 console.log("----start----");

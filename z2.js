@@ -1,4 +1,5 @@
 function minCoinChange(coins, amount) {
+  // 生成找零矩阵
   const cache = [];
   for (let i = 0; i < coins.length; i++) {
     cache[i] = [];
@@ -18,8 +19,22 @@ function minCoinChange(coins, amount) {
       }
     }
   }
-  return cache;
+
+  // 获取找零的钱数
+  const result = [];
+  let index = coins.length - 1;
+  let value = amount;
+  while (index >= 0 && cache[index][value] > 0) {
+    if (index > 0 && cache[index][value] === cache[index - 1][value]) {
+      index--;
+    } else {
+      const coin = coins[index];
+      result.unshift(coin);
+      value = value - coin;
+    }
+  }
+  return result;
 }
 
 console.log("----start----");
-console.log(minCoinChange([1, 3, 5, 7], 8));
+console.log(minCoinChange([1, 3, 5, 7, 9], 8));

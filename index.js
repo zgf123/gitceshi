@@ -28,3 +28,14 @@ function minCoinChange(coins, amount) {
 
 console.log("----start----");
 console.log(minCoinChange([1, 3, 5, 7, 9], 13));
+
+// let n = 1;
+// for (let i = 0; i < 100; i++) {
+//   n += 1;
+// }
+// console.log(n);
+
+function recursive(m, i) {
+  return i < 100 ? recursive(m + 1, i + 1) : m;
+}
+console.log(recursive(1, 0));

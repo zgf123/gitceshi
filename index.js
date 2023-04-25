@@ -1,41 +1,55 @@
 function minCoinChange(coins, amount) {
+  const arr = [];
+  function myfn(value) {
+    arr.push(value);
+    for (let i = 0; i < coins.length; i++) {
+      const coin = coins[i];
+      const gap = value - coin;
+      if (gap > 0) myfn(gap);
+    }
+  }
+  myfn(amount);
+  console.log([...new Set(arr)].sort());
+
+  const arr1 = [amount];
+  let n = 0;
+  while (n < arr1.length) {
+    for (let i = 0; i < coins.length; i++) {
+      const coin = coins[i];
+      const gap = arr1[n] - coin;
+      if (gap > 0) arr1.push(gap);
+    }
+    n++;
+  }
+  console.log([...new Set(arr1)].sort());
+
   const cache = [];
-  function makeChange(value) {
-    if (value <= 0) return [];
-    if (cache[value]) return cache[value];
+  let newAmount = 0;
+
+  while (newAmount <= amount) {
     let min = [];
     for (let i = 0; i < coins.length; i++) {
       const coin = coins[i];
-      const newValue = value - coin;
-      if (newValue === 0) {
+      const newCoin = newAmount - coin;
+      if (newCoin === 0) {
         min = [coin];
-      } else if (newValue > 0) {
-        const newMin = makeChange(newValue);
-        if (newMin.length) {
-          const curMin = [coin, ...newMin];
+      } else if (newCoin > 0) {
+        if (cache[newCoin]?.length) {
+          const newMin = [coin, ...cache[newCoin]];
           if (!min.length) {
-            min = curMin;
-          } else if (curMin.length < min.length) {
-            min = curMin;
+            min = newMin;
+          } else if (newMin.length < min.length) {
+            min = newMin;
           }
         }
       }
     }
-    return (cache[value] = min);
+    cache[newAmount] = min;
+    newAmount++;
   }
-  return makeChange(amount);
+
+  return cache[amount];
 }
 
 console.log("----start----");
-console.log(minCoinChange([1, 3, 5, 7, 9], 13));
-
-// let n = 1;
-// for (let i = 0; i < 100; i++) {
-//   n += 1;
-// }
-// console.log(n);
-
-function recursive(m, i) {
-  return i < 100 ? recursive(m + 1, i + 1) : m;
-}
-console.log(recursive(1, 0));
+console.log(minCoinChange([2, 5, 6], 11));

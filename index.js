@@ -1,39 +1,29 @@
 function minCoinChange(coins, value) {
-  // 先找出所有找零可能用到的硬币
-  const amounts = [value];
-  for (let n = 0; n < amounts.length; n++) {
-    for (let i = 0; i < coins.length; i++) {
-      const coin = coins[i];
-      const gap = amounts[n] - coin;
-      if (gap > 0) amounts.push(gap);
-    }
-  }
-
-  // 需要从小到大排列，因为在进行递归时是在归阶段进行找零的
-  const sortedAmounts = [...new Set(amounts)].sort((a, b) => a - b);
   const cache = [];
 
-  // 进行找零计算
-  for (let n = 0; n < sortedAmounts.length; n++) {
-    let amount = sortedAmounts[n];
+  function makeChange(amount) {
+    if (amount <= 0) return [];
+    if (cache[amount]) return cache[amount];
     for (let i = 0; i < coins.length; i++) {
       const coin = coins[i];
-      const newAmount = amount - coin;
-      if (newAmount === 0) {
+      const newCoin = amount - coin;
+      if (newCoin === 0) {
         cache[amount] = [coin];
-      } else if (newAmount > 0) {
-        if (cache[newAmount]?.length) {
-          const newMin = [coin, ...cache[newAmount]];
+      } else if (newCoin > 0) {
+        const newMin = makeChange(newCoin);
+        if (newMin.length) {
+          const curMin = [coin, ...newMin];
           if (!cache[amount]) {
-            cache[amount] = newMin;
-          } else if (newMin.length < cache[amount].length) {
-            cache[amount] = newMin;
+            cache[amount] = curMin;
+          } else if (curMin.length < cache[amount].length) {
+            cache[amount] = curMin;
           }
         }
       }
     }
+    return cache[amount] || [];
   }
-
+  makeChange(value);
   return cache[value];
 }
 

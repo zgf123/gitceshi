@@ -1,54 +1,40 @@
-function minCoinChange(coins, amount) {
-  const arr = [];
-  function myfn(value) {
-    arr.push(value);
+function minCoinChange(coins, value) {
+  // 先找出所有找零可能用到的硬币
+  const amounts = [value];
+  for (let n = 0; n < amounts.length; n++) {
     for (let i = 0; i < coins.length; i++) {
       const coin = coins[i];
-      const gap = value - coin;
-      if (gap > 0) myfn(gap);
+      const gap = amounts[n] - coin;
+      if (gap > 0) amounts.push(gap);
     }
   }
-  myfn(amount);
-  console.log([...new Set(arr)].sort());
 
-  const arr1 = [amount];
-  let n = 0;
-  while (n < arr1.length) {
-    for (let i = 0; i < coins.length; i++) {
-      const coin = coins[i];
-      const gap = arr1[n] - coin;
-      if (gap > 0) arr1.push(gap);
-    }
-    n++;
-  }
-  console.log([...new Set(arr1)].sort());
-
+  // 需要从小到大排列，因为在进行递归时是在归阶段进行找零的
+  const sortedAmounts = [...new Set(amounts)].sort((a, b) => a - b);
   const cache = [];
-  let newAmount = 0;
 
-  while (newAmount <= amount) {
-    let min = [];
+  // 进行找零计算
+  for (let n = 0; n < sortedAmounts.length; n++) {
+    let amount = sortedAmounts[n];
     for (let i = 0; i < coins.length; i++) {
       const coin = coins[i];
-      const newCoin = newAmount - coin;
-      if (newCoin === 0) {
-        min = [coin];
-      } else if (newCoin > 0) {
-        if (cache[newCoin]?.length) {
-          const newMin = [coin, ...cache[newCoin]];
-          if (!min.length) {
-            min = newMin;
-          } else if (newMin.length < min.length) {
-            min = newMin;
+      const newAmount = amount - coin;
+      if (newAmount === 0) {
+        cache[amount] = [coin];
+      } else if (newAmount > 0) {
+        if (cache[newAmount]?.length) {
+          const newMin = [coin, ...cache[newAmount]];
+          if (!cache[amount]) {
+            cache[amount] = newMin;
+          } else if (newMin.length < cache[amount].length) {
+            cache[amount] = newMin;
           }
         }
       }
     }
-    cache[newAmount] = min;
-    newAmount++;
   }
 
-  return cache[amount];
+  return cache[value];
 }
 
 console.log("----start----");

@@ -1,31 +1,44 @@
 function minCoinChange(coins, value) {
   const cache = [];
-
-  function makeChange(amount) {
-    if (amount <= 0) return [];
-    if (cache[amount]) return cache[amount];
-    for (let i = 0; i < coins.length; i++) {
-      const coin = coins[i];
-      const newCoin = amount - coin;
+  for (let i = 0; i < coins.length; i++) {
+    const coin = coins[i];
+    cache[i] = [];
+    for (let j = 0; j <= value; j++) {
+      cache[i][j] = 0;
+      const newCoin = j - coin;
       if (newCoin === 0) {
-        cache[amount] = [coin];
-      } else if (newCoin > 0) {
-        const newMin = makeChange(newCoin);
-        if (newMin.length) {
-          const curMin = [coin, ...newMin];
-          if (!cache[amount]) {
-            cache[amount] = curMin;
-          } else if (curMin.length < cache[amount].length) {
-            cache[amount] = curMin;
+        cache[i][j] = 1;
+      } else if (newCoin < 0) {
+        cache[i][j] = cache[i - 1]?.[j] || 0;
+      } else {
+        if (cache[i][newCoin]) {
+          const min = cache[i][newCoin] + 1;
+          const preMin = cache[i - 1]?.[j] || 0;
+          cache[i][j] = min;
+          if (preMin && preMin < min) {
+            cache[i][j] = preMin;
           }
+        } else {
+          cache[i][j] = cache[i - 1]?.[j] || 0;
         }
       }
     }
-    return cache[amount] || [];
   }
-  makeChange(value);
-  return cache[value];
+
+  const changes = [];
+  let i = coins.length - 1;
+  let amount = value;
+  while (cache[i][amount] > 0) {
+    if (cache[i - 1]?.[amount] && cache[i][amount] === cache[i - 1][amount]) {
+      i--;
+    } else {
+      changes.push(coins[i]);
+      amount -= coins[i];
+    }
+  }
+
+  return changes;
 }
 
 console.log("----start----");
-console.log(minCoinChange([2, 5, 6], 11));
+console.log(minCoinChange([1, 6, 5, 2], 11));

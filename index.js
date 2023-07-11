@@ -1,30 +1,35 @@
-function minCoinChange(coins, amount) {
-  const cache = [];
-  function makeChange(value) {
-    if (value <= 0) return [];
-    if (cache[value]) return cache[value];
-    let min = [];
-    for (let i = 0; i < coins.length; i++) {
-      const coin = coins[i];
-      const newValue = value - coin;
-      if (newValue === 0) {
-        min = [coin];
-      } else if (newValue > 0) {
-        const newMin = makeChange(newValue);
-        if (newMin.length) {
-          const curMin = [coin, ...newMin];
-          if (!min.length) {
-            min = curMin;
-          } else if (curMin.length < min.length) {
-            min = curMin;
-          }
-        }
-      }
-    }
-    return (cache[value] = min);
-  }
-  return makeChange(amount);
+const ot = {
+  work() {
+    this.job();
+  },
+};
+
+const o1 = {
+  job() {
+    console.log("o1 在工作");
+  },
+};
+
+const o2 = {
+  job() {
+    console.log("o2 在工作");
+  },
+};
+
+// ot.work.call(o1);
+
+function f0() {
+  console.log(1);
+  this();
+  console.log(2);
 }
 
-console.log("----start----");
-console.log(minCoinChange([1, 3, 5, 7, 9], 13));
+function f1() {
+  console.log("f1 在工作");
+}
+
+function f2() {
+  console.log("f2 在工作");
+}
+
+f0.call(f2);
